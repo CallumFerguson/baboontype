@@ -118,6 +118,109 @@ const singularNouns = [
 
 const pluralNouns = ["people", "others"];
 
+const adjectives = [
+  "other",
+  "new",
+  "good",
+  "high",
+  "old",
+  "great",
+  "big",
+  "American",
+  "small",
+  "large",
+  "national",
+  "young",
+  "different",
+  "black",
+  "long",
+  "little",
+  "important",
+  "political",
+  "bad",
+  "white",
+  "real",
+  "best",
+  "right",
+  "social",
+  "only",
+  "public",
+  "sure",
+  "low",
+  "early",
+  "able",
+  "human",
+  "local",
+  "late",
+  "hard",
+  "major",
+  "better",
+  "economic",
+  "strong",
+  "possible",
+  "whole",
+  "free",
+  "military",
+  "true",
+  "federal",
+  "international",
+  "full",
+  "special",
+  "easy",
+  "clear",
+  "recent",
+  "certain",
+  "personal",
+  "open",
+  "red",
+  "difficult",
+  "available",
+  "likely",
+  "short",
+  "single",
+  "medical",
+  "current",
+  "wrong",
+  "private",
+  "past",
+  "foreign",
+  "fine",
+  "common",
+  "poor",
+  "natural",
+  "significant",
+  "similar",
+  "hot",
+  "dead",
+  "central",
+  "happy",
+  "serious",
+  "ready",
+  "simple",
+  "left",
+  "physical",
+  "general",
+  "environmental",
+  "financial",
+  "blue",
+  "democratic",
+  "dark",
+  "various",
+  "entire",
+  "close",
+  "legal",
+  "religious",
+  "cold",
+  "final",
+  "main",
+  "green",
+  "nice",
+  "huge",
+  "popular",
+  "traditional",
+  "cultural",
+];
+
 const singularVerbs = [
   "has",
   "does",
@@ -142,6 +245,7 @@ const singularVerbs = [
   "tries",
   "leaves",
   "calls",
+  "forgets",
 ];
 
 const pluralVerbs = [
@@ -168,15 +272,158 @@ const pluralVerbs = [
   "try",
   "leave",
   "call",
+  "forget",
+];
+
+const adverbs = [
+  "bashfully",
+  "beautifully",
+  "bitterly",
+  "bleakly",
+  "blindly",
+  "blissfully",
+  "boastfully",
+  "boldly",
+  "bravely",
+  "briefly",
+  "brightly",
+  "briskly",
+  "broadly",
+  "busily",
+  "calmly",
+  "carefully",
+  "carelessly",
+  "cautiously",
+  "certainly",
+  "cheerfully",
+  "clearly",
+  "cleverly",
+  "closely",
+  "coaxingly",
+  "colorfully",
+  "commonly",
+  "continually",
+  "coolly",
+  "correctly",
+  "courageously",
+  "crossly",
+  "cruelly",
+  "curiously",
+  "daily",
+  "daintily",
+  "dearly",
+  "deceivingly",
+  "deeply",
+  "defiantly",
+  "deliberately",
+  "delightfully",
+  "diligently",
+  "dimly",
+  "doubtfully",
+  "dreamily",
+  "easily",
+  "elegantly",
+  "energetically",
+  "enormously",
+  "enthusiastically",
+  "equally",
+  "especially",
+  "even",
+  "fortunately",
+  "frankly",
+  "frantically",
+  "freely",
+  "frenetically",
+  "hopelessly",
+  "shrilly",
+  "shyly",
+  "silently",
+  "sleepily",
+  "slowly",
+  "smoothly",
+  "softly",
+  "solemnly",
+  "solidly",
+  "sometimes",
+  "soon",
+  "speedily",
+  "stealthily",
+  "sternly",
+  "strictly",
+  "unaccountably",
+  "unbearably",
+  "unethically",
+  "unexpectedly",
+  "unfortunately",
+  "unimpressively",
+  "unnaturally",
+  "unnecessarily",
+  "upbeat",
+  "upright",
+  "upside-down",
+  "upward",
+  "vainly",
+  "valiantly",
+  "vastly",
+  "verbally",
+  "very",
+  "viciously",
+  "victoriously",
+  "violently",
+  "weakly",
+  "wearily",
+  "well",
+  "wetly",
+  "wholly",
+  "wildly",
 ];
 
 const objectPronouns = ["me", "them", "us", "that", "you", "him", "her"];
 
+const prepositions = [
+  "to",
+  "in",
+  "into",
+  "on",
+  "onto",
+  "at",
+  "since",
+  "for",
+  "by",
+  "from",
+  "until",
+];
+
+const clauses = [
+  "after",
+  "while",
+  "if",
+  "as",
+  "even though",
+  "as if",
+  "before",
+  "provided that",
+  "since",
+  "unless",
+  "until",
+  "once",
+  "when",
+  "rather than",
+  "although",
+];
+
+const coordinatingConjunctions = ["and", "but", "or"];
+
 function getNoun(plurality: 1 | 2): string {
-  if (plurality == 1) {
-    return singularNouns[range(0, singularNouns.length)];
+  const noun =
+    plurality === 1
+      ? singularNouns[range(0, singularNouns.length)]
+      : pluralNouns[range(0, pluralNouns.length)];
+  if (Math.random() < 0.4) {
+    const adjective = adjectives[range(0, adjectives.length)];
+    return adjective + " " + noun;
   } else {
-    return pluralNouns[range(0, pluralNouns.length)];
+    return noun;
   }
 }
 
@@ -221,6 +468,16 @@ function getObject(): string {
   }
 }
 
+function getPrepositionalPhrase(): string {
+  const percentSingularNouns =
+    singularNouns.length / (singularNouns.length + pluralNouns.length);
+  return (
+    prepositions[range(0, prepositions.length)] +
+    " " +
+    getNoun(Math.random() < percentSingularNouns ? 1 : 2)
+  );
+}
+
 // https://academicguides.waldenu.edu/writingcenter/grammar/sentencestructure
 // subjects and objects can be multiple words. subject could be (The small doctor), object could be (tasty spaghetti). mostly just adjatives, but an adjative could be who something belongs to, like (his spaghetti)
 // prepositional phrases can be added to the end of a sentence
@@ -234,19 +491,64 @@ function getObject(): string {
 // plural group nouns like (the doctor and the nurse)
 // adverbs
 
-export function getSentence(): Sentence {
-  let words: string[] = [];
+function getIndependentClause(): string {
+  let sentenceString = "";
 
   const { subject, plurality } = getSubject();
   const verb = getVerb(plurality);
   const object = getObject();
 
-  words = words.concat(subject.split(" "));
-  words = words.concat(verb.split(" "));
-  words = words.concat(object.split(" "));
+  const hasAdverb = Math.random() < 0.4;
+  const adverbPlacement = range(0, 3);
+  const adverb = adverbs[range(0, adverbs.length)];
 
-  words[words.length - 1] += ".";
-  const sentence: Sentence = { words };
-  console.log(sentence);
+  if (hasAdverb && adverbPlacement === 0) {
+    sentenceString += adverb;
+  }
+  sentenceString += (sentenceString === "" ? "" : " ") + subject;
+  if (hasAdverb && adverbPlacement === 1) {
+    sentenceString += " " + adverb;
+  }
+  sentenceString += " " + verb;
+  sentenceString += " " + object;
+  if (hasAdverb && adverbPlacement === 2) {
+    sentenceString += " " + adverb;
+  }
+
+  if (Math.random() < 0.5) {
+    const prepositionalPhrase = getPrepositionalPhrase();
+    sentenceString += " " + prepositionalPhrase;
+  }
+
+  return sentenceString;
+}
+
+function getDependentClause(): string {
+  return clauses[range(0, clauses.length)] + " " + getIndependentClause();
+}
+
+export function getSentence(): Sentence {
+  let sentenceString = getIndependentClause();
+
+  if (Math.random() < 0.5) {
+    if (Math.random() < 0.5) {
+      const dependentClause = getDependentClause();
+      if (Math.random() < 0.5) {
+        sentenceString += " " + dependentClause;
+      } else {
+        sentenceString = dependentClause + ", " + sentenceString;
+      }
+    } else {
+      const coordinatingConjunction =
+        coordinatingConjunctions[range(0, coordinatingConjunctions.length)];
+      const independentClause = getIndependentClause();
+      sentenceString +=
+        ", " + coordinatingConjunction + " " + independentClause;
+    }
+  }
+
+  sentenceString += ".";
+
+  const sentence: Sentence = { words: sentenceString.split(" ") };
   return sentence;
 }
