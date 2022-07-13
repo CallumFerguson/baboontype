@@ -143,6 +143,12 @@
     "type": "script",
     "affectsWordGeneration": true,
     "info": "Nonsense words that look like the current language."
+  },
+  {
+    "name": "sentences",
+    "type": "script",
+    "affectsWordGeneration": true,
+    "info": "Generates random sentences."
   }
 ]
 

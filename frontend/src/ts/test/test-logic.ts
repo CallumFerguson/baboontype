@@ -29,6 +29,7 @@ import * as DB from "../db";
 import * as Replay from "./replay";
 import * as Poetry from "./poetry";
 import * as Wikipedia from "./wikipedia";
+import * as Sentences from "./sentences";
 import * as TodayTracker from "./today-tracker";
 import * as WeakSpot from "./weak-spot";
 import * as Wordset from "./wordset";
@@ -873,7 +874,9 @@ export async function init(): Promise<void> {
     const wordset = Wordset.withWords(wordList, Config.funbox);
 
     if (
-      (Config.funbox == "wikipedia" || Config.funbox == "poetry") &&
+      (Config.funbox == "wikipedia" ||
+        Config.funbox == "poetry" ||
+        Config.funbox == "sentences") &&
       Config.mode != "custom"
     ) {
       let wordCount = 0;
@@ -883,10 +886,18 @@ export async function init(): Promise<void> {
         (Config.mode == "words" && Config.words >= wordCount) ||
         (Config.mode === "time" && wordCount < 100)
       ) {
-        const section =
-          Config.funbox == "wikipedia"
-            ? await Wikipedia.getSection(Config.language)
-            : await Poetry.getPoem();
+        let section:
+          | Wikipedia.Section
+          | Poetry.Poem
+          | Sentences.Sentence
+          | undefined;
+        if (Config.funbox === "wikipedia") {
+          section = await Wikipedia.getSection(Config.language);
+        } else if (Config.funbox === "poetry") {
+          section = await Poetry.getPoem();
+        } else if (Config.funbox === "sentences") {
+          section = Sentences.getSentence();
+        }
 
         if (section === undefined) continue;
 
@@ -1087,6 +1098,22 @@ export async function addWord(): Promise<void> {
     (Config.mode === "quote" &&
       TestWords.words.length >= (TestWords.randomQuote.textSplit?.length ?? 0))
   ) {
+    return;
+  }
+
+  if (Config.funbox === "sentences") {
+    if (TestWords.words.length - TestWords.words.currentIndex < 20) {
+      const sentence = Sentences.getSentence();
+      let wordCount = 0;
+      for (const word of sentence.words) {
+        if (wordCount >= Config.words && Config.mode == "words") {
+          break;
+        }
+        wordCount++;
+        TestWords.words.push(word);
+        TestUI.addWord(word);
+      }
+    }
     return;
   }
 
