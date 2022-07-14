@@ -473,23 +473,10 @@ function getPrepositionalPhrase(): string {
     singularNouns.length / (singularNouns.length + pluralNouns.length);
   return (
     prepositions[range(0, prepositions.length)] +
-    " " +
+    " the " +
     getNoun(Math.random() < percentSingularNouns ? 1 : 2)
   );
 }
-
-// https://academicguides.waldenu.edu/writingcenter/grammar/sentencestructure
-// subjects and objects can be multiple words. subject could be (The small doctor), object could be (tasty spaghetti). mostly just adjatives, but an adjative could be who something belongs to, like (his spaghetti)
-// prepositional phrases can be added to the end of a sentence
-// dependent clause is just another sentence starting with (although, because, etc.) at the start, or starting with (as, etc.) at the end
-// any two sentences can be added together with (and or but)
-// a noun could be very long, for example (the difference between the weather in Minnesota in the winter and the weather in Minnesota in the summer)
-// https://academicguides.waldenu.edu/writingcenter/grammar/subjectverbagreement
-// If the subject is singular, the verb must be singular too
-// https://academicguides.waldenu.edu/writingcenter/grammar/verbforms
-// https://academicguides.waldenu.edu/writingcenter/grammar/verbtenses
-// plural group nouns like (the doctor and the nurse)
-// adverbs
 
 function getIndependentClause(): string {
   let sentenceString = "";
@@ -498,22 +485,13 @@ function getIndependentClause(): string {
   const verb = getVerb(plurality);
   const object = getObject();
 
-  const hasAdverb = Math.random() < 0.4;
-  const adverbPlacement = range(0, 3);
-  const adverb = adverbs[range(0, adverbs.length)];
-
-  if (hasAdverb && adverbPlacement === 0) {
-    sentenceString += adverb;
-  }
   sentenceString += (sentenceString === "" ? "" : " ") + subject;
-  if (hasAdverb && adverbPlacement === 1) {
+  if (Math.random() < 0.4) {
+    const adverb = adverbs[range(0, adverbs.length)];
     sentenceString += " " + adverb;
   }
   sentenceString += " " + verb;
   sentenceString += " " + object;
-  if (hasAdverb && adverbPlacement === 2) {
-    sentenceString += " " + adverb;
-  }
 
   if (Math.random() < 0.5) {
     const prepositionalPhrase = getPrepositionalPhrase();
@@ -549,6 +527,5 @@ export function getSentence(): Sentence {
 
   sentenceString += ".";
 
-  const sentence: Sentence = { words: sentenceString.split(" ") };
-  return sentence;
+  return { words: sentenceString.split(" ") };
 }
